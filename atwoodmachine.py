@@ -1,60 +1,43 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
 mass = []
-mass_two=[]
 time = []
 time_avg = []
-time_pow = []
 accel = []
-delta_accel = []
-delta_accel_avg = []
-n = 0
-mass_n = (int(input('Enter number of masses : ')))
-number_mass = 1
+
+mass_n = int(input('Enter number of masses: '))
+
 for k in range(mass_n):
-    mass.append(float(input('Enter mass :' )))
-    print(mass)
-n_time = int(input('Enter number of time value : ' ))
-v_time = n_time*len(mass)
-print(v_time)
-while n < v_time:
-    time.append(float(input('Enter registered time')))
-    print(time)
-    n+=1
-time = np.array(time)
-time = time.reshape(mass_n, n_time)
-print(time)
+    mass.append(float(input(f'Enter mass {k + 1}: ')))
+
+n_time = int(input('Enter number of time values: '))
+
+v_time = n_time * mass_n
+
+for n in range(v_time):
+    time.append(float(input(f'Enter registered time {n + 1}: ')))
+
+time = np.array(time).reshape(mass_n, n_time)
+
 for x in range(mass_n):
-    avg_time = sum(time[x])
-    time_avg.append(avg_time/len(time[x]))
-    print('The average time for each mass is : ', time_avg[x])
-print(time_avg)
-ind = 0
-while ind < len(time_avg):
-    accel.append(2*mass[ind]/time_avg[ind]**2)
-    print('Acceleration value: ', accel[ind])
-    ind+=1
-accel_avg = sum(accel)/len(accel)
-print('Acceleration values are', accel)
-print('Average acceleration is ' , accel_avg)   
-for y in range(len(accel)):
-    delta_accel_avg = accel[y]/accel_avg
-    delta_accel.append(delta_accel_avg)
-print('Delta aceleration is' , delta_accel)
-for k in range(len(delta_accel)):
-    delta_accel_pow = []
-    delta_accel_pow.append(delta_accel[k]**2)
-    print('Delta acc by the power of 2', delta_accel_pow)
-for j in range(len(time_avg)):
-    time_pow.append(time_avg[j]**2)
-    print('Time by pow of 2 ',time_pow[j])
-for g in range(len(mass)):
-    mass_two.append(mass[g]*2)
-    print('The mass multiplied by two is', mass_two[g])
-plt.style.use('fivethirtyeight') #visualisation part
-plt.plot(time_pow, mass_two , color='black', marker='x',linestyle='dashed',markerfacecolor='yellow', mew= 2, markersize=16,label = 'Acceleration')
-plt.xlabel('Time')
-plt.ylabel('Mass')
+    avg_time = np.mean(time[x])
+    time_avg.append(avg_time)
+    print(f'The average time for mass {x + 1} is: {avg_time:.2f} seconds')
+
+for ind in range(mass_n):
+    accel.append(2 * mass[ind] / (time_avg[ind] ** 2))
+    print(f'Acceleration for mass {ind + 1} is: {accel[ind]:.2f} m/s^2')
+
+accel_avg = np.mean(accel)
+print(f'Average acceleration for all masses is: {accel_avg:.2f} m/s^2')
+
+mass_two = [2 * m for m in mass]
+
+plt.style.use('fivethirtyeight')
+plt.plot([t ** 2 for t in time_avg], mass_two, color='black', marker='x', linestyle='dashed', markerfacecolor='yellow', mew=2, markersize=16, label='Acceleration')
+plt.xlabel('Time^2 (s^2)')
+plt.ylabel('Mass (kg)')
 plt.legend()
 plt.grid(True)
 plt.show()
